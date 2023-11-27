@@ -1,4 +1,4 @@
-package ru.s4idm4de.category.model;
+package ru.s4idm4de.recipe.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,21 +12,22 @@ import java.time.LocalDateTime;
 @Data
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "request_categories", schema = "public")
+@Table(name = "like_recipes", schema = "public", uniqueConstraints = {@UniqueConstraint(name = "user_recipe_constraint",
+        columnNames = {"user_id", "recipe_id"})})
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestCategory {
-
+public class LikeRecipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "initiator_id", nullable = false)
-    private User initiator;
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

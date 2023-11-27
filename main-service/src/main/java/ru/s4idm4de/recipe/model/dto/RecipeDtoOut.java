@@ -8,9 +8,7 @@ import ru.s4idm4de.category.model.dto.CategoryDtoOut;
 import ru.s4idm4de.user.model.dto.UserDtoOut;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder(toBuilder = true)

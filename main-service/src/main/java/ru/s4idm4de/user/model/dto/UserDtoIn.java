@@ -1,12 +1,12 @@
 package ru.s4idm4de.user.model.dto;
 
-import javax.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.s4idm4de.user.model.Gender;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data

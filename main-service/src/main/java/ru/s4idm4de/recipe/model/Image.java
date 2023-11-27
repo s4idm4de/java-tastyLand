@@ -1,11 +1,12 @@
 package ru.s4idm4de.recipe.model;
 
 
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
 @Builder(toBuilder = true)

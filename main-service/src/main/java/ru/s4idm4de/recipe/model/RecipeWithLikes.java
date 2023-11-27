@@ -1,5 +1,4 @@
-package ru.s4idm4de.category.model.dto;
-
+package ru.s4idm4de.recipe.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,13 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestCategoryDtoOut {
+public class RecipeWithLikes {
+    private Recipe recipe;
 
-    private Long id;
-
-    private String name;
-
-    private Long initiatorId;
-
-    private String createdAt;
+    private Long likes;
 }

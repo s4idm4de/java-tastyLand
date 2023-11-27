@@ -17,10 +17,12 @@ import ru.s4idm4de.category.model.dto.CategoryDtoOut;
 import ru.s4idm4de.category.model.dto.ConfirmedCategoriesDto;
 import ru.s4idm4de.recipe.controller.RecipeControllerUsers;
 import ru.s4idm4de.recipe.model.Image;
+import ru.s4idm4de.recipe.model.LikeRecipe;
 import ru.s4idm4de.recipe.model.Recipe;
 import ru.s4idm4de.recipe.model.dto.RecipeDtoIn;
 import ru.s4idm4de.recipe.model.dto.RecipeDtoOut;
 import ru.s4idm4de.recipe.model.dto.RecipeSort;
+import ru.s4idm4de.recipe.repository.LikeRecipeRepository;
 import ru.s4idm4de.user.UserController;
 import ru.s4idm4de.user.model.Gender;
 import ru.s4idm4de.user.model.User;
@@ -88,6 +90,8 @@ public class RecipeTest {
     private final CategoryController categoryController;
 
     private final RecipeControllerUsers recipeControllerUsers;
+
+    private final LikeRecipeRepository likeRecipeRepository;
 
     private RecipeDtoIn recipeDtoIn1;
 
@@ -381,5 +385,58 @@ public class RecipeTest {
                 recipeControllerUsers.getRecipes(2L, List.of(1L, 2L, 3L, 4L), 0, 10, RecipeSort.DATE).size());
         assertEquals(2,
                 recipeControllerUsers.getRecipes(1L, List.of(1L, 2L), 0, 10, RecipeSort.TITLE).size());
+    }
+
+    @Test
+    void postLike() {
+        recipeControllerUsers.postRecipe(1L, recipeDtoIn1);
+        recipeControllerUsers.postLike(1L, 1L);
+        TypedQuery<LikeRecipe> query = em.createQuery("Select l from LikeRecipe l where l.id = :id", LikeRecipe.class);
+        LikeRecipe likeRecipe = query.setParameter("id", 1L)
+                .getSingleResult();
+        assertEquals(user1, likeRecipe.getUser());
+    }
+
+    @Test
+    void deleteLike() {
+        recipeControllerUsers.postRecipe(1L, recipeDtoIn1);
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, new Executable() {
+            @Override
+            public void execute() throws ResponseStatusException {
+                recipeControllerUsers.deleteLike(1L, 1L);
+            }
+        });
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        recipeControllerUsers.postLike(1L, 1L);
+        recipeControllerUsers.deleteLike(1L, 1L);
+        TypedQuery<LikeRecipe> query = em.createQuery("Select l from LikeRecipe l", LikeRecipe.class);
+        List<LikeRecipe> likeRecipe = query.getResultList();
+        assertEquals(0, likeRecipe.size());
+    }
+
+    @Test
+    void getRecipeWithLikes() {
+        recipeControllerUsers.postRecipe(1L, recipeDtoIn1);
+        recipeControllerUsers.postRecipe(1L, recipeDtoIn2);
+        recipeControllerUsers.postRecipe(2L, recipeDtoIn3);
+        recipeControllerUsers.postLike(1L, 2L);
+        recipeControllerUsers.postLike(2L, 2L);
+        recipeDtoOut2.setCreatedAt(recipeControllerUsers.getRecipe(1L, 2L).getCreatedAt());
+        recipeDtoOut2.setLikes(2L);
+        assertEquals(recipeDtoOut2, recipeControllerUsers.getRecipe(1L, 2L));
+    }
+
+    @Test
+    void getRecipesWithLikes() {
+        recipeControllerUsers.postRecipe(1L, recipeDtoIn1);
+        recipeControllerUsers.postRecipe(1L, recipeDtoIn2);
+        recipeControllerUsers.postRecipe(2L, recipeDtoIn3);
+        recipeControllerUsers.postLike(1L, 2L);
+        recipeControllerUsers.postLike(2L, 1L);
+        recipeControllerUsers.postLike(2L, 2L);
+        assertEquals(2,
+                recipeControllerUsers.getRecipes(1L, List.of(1L, 2L), 0, 10, RecipeSort.LIKE).size());
+        assertEquals(2, recipeControllerUsers.getRecipes(1L, List.of(1L, 2L),
+                0, 10, RecipeSort.LIKE).get(0).getLikes());
     }
 }

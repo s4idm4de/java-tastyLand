@@ -7,7 +7,7 @@ public enum RecipeSort {
 
     private String name;
 
-    RecipeSort(String name){
+    RecipeSort(String name) {
         this.name = name;
     }
 

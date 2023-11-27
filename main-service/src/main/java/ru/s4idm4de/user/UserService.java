@@ -1,11 +1,9 @@
 package ru.s4idm4de.user;
 
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,6 +12,8 @@ import ru.s4idm4de.user.model.User;
 import ru.s4idm4de.user.model.dto.UserDtoIn;
 import ru.s4idm4de.user.model.dto.UserDtoOut;
 import ru.s4idm4de.user.model.mapper.UserMapper;
+
+import javax.validation.Valid;
 
 @Service
 @Transactional

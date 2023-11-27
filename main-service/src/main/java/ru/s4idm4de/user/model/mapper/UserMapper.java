@@ -1,10 +1,10 @@
 package ru.s4idm4de.user.model.mapper;
 
-import javax.validation.Valid;
 import ru.s4idm4de.user.model.User;
 import ru.s4idm4de.user.model.dto.UserDtoIn;
 import ru.s4idm4de.user.model.dto.UserDtoOut;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -25,12 +25,12 @@ public class UserMapper {
     public static User toValidUser(UserDtoIn userDtoIn, User user) {
         @Valid User validUser = User.builder()
                 .id(user.getId())
-                .gender(userDtoIn.getGender() == null? user.getGender() : userDtoIn.getGender())
-                .name(userDtoIn.getName() == null? user.getName() : userDtoIn.getName())
-                .email(userDtoIn.getEmail() == null? user.getEmail() : userDtoIn.getEmail())
-                .birthday(userDtoIn.getBirthday() == null? user.getBirthday() : userDtoIn.getBirthday())
+                .gender(userDtoIn.getGender() == null ? user.getGender() : userDtoIn.getGender())
+                .name(userDtoIn.getName() == null ? user.getName() : userDtoIn.getName())
+                .email(userDtoIn.getEmail() == null ? user.getEmail() : userDtoIn.getEmail())
+                .birthday(userDtoIn.getBirthday() == null ? user.getBirthday() : userDtoIn.getBirthday())
                 .allowToPublish(user.getAllowToPublish())
-                .status(userDtoIn.getStatus() == null? user.getStatus() : userDtoIn.getStatus())
+                .status(userDtoIn.getStatus() == null ? user.getStatus() : userDtoIn.getStatus())
                 .build();
         return validUser;
     }
@@ -46,7 +46,7 @@ public class UserMapper {
 
     public static List<UserDtoOut> toUserDtoOut(Iterable<User> users) {
         List<UserDtoOut> result = new ArrayList<>();
-        for(User user : users) {
+        for (User user : users) {
             result.add(toUserDtoOut(user));
         }
         return result;

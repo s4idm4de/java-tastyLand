@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.s4idm4de.recipe.model.dto.RecipeParams;
 import ru.s4idm4de.recipe.model.dto.RecipeDtoIn;
 import ru.s4idm4de.recipe.model.dto.RecipeDtoOut;
+import ru.s4idm4de.recipe.model.dto.RecipeParams;
 import ru.s4idm4de.recipe.model.dto.RecipeSort;
 import ru.s4idm4de.recipe.service.RecipeServiceUsers;
 
@@ -64,4 +64,27 @@ public class RecipeControllerUsers {
         return recipeServiceUsers.patchRecipe(userId, recipeId, recipeDtoIn);
     }
 
+    @DeleteMapping(path = "/{recipeId}")
+    public ResponseEntity<Void> deleteRecipe(@PathVariable Long userId,
+                                             @PathVariable Long recipeId) {
+        log.info("RecipeControllerUsers deleteRecipe userId {}, recipeId {}", userId, recipeId);
+        recipeServiceUsers.deleteRecipe(userId, recipeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping(path = "/{recipeId}/likes")
+    public ResponseEntity<Void> postLike(@PathVariable Long userId,
+                                         @PathVariable Long recipeId) {
+        log.info("RecipeControllerUsers postLike userId {}, recipeId {}", userId, recipeId);
+        recipeServiceUsers.postLike(userId, recipeId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(path = "/{recipeId}/likes")
+    public ResponseEntity<Void> deleteLike(@PathVariable Long userId,
+                                           @PathVariable Long recipeId) {
+        log.info("RecipeControllerUsers deleteLike userId {}, recipeId {}", userId, recipeId);
+        recipeServiceUsers.deleteLike(userId, recipeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -22,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-//@RequestMapping
 @Slf4j
 @RequiredArgsConstructor
 public class CategoryController {
@@ -70,8 +69,8 @@ public class CategoryController {
                 .userId(adminId)
                 .from(from)
                 .size(size)
-                .startDate(startDate == null? null : LocalDateTime.parse(startDate, formatter))
-                .endDate(endDate == null? null : LocalDateTime.parse(endDate, formatter)).build();
+                .startDate(startDate == null ? null : LocalDateTime.parse(startDate, formatter))
+                .endDate(endDate == null ? null : LocalDateTime.parse(endDate, formatter)).build();
         log.info("CategoryController getRequestCategories categoryParams {}", categoryParams);
         return new ResponseEntity(categoryService.getRequestCategories(categoryParams), HttpStatus.OK);
     }

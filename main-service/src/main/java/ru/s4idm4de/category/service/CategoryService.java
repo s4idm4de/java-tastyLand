@@ -25,7 +25,6 @@ import ru.s4idm4de.exception.NotFoundException;
 import ru.s4idm4de.user.UserRepository;
 import ru.s4idm4de.user.model.User;
 
-
 import java.util.List;
 
 @Service
@@ -93,20 +92,20 @@ public class CategoryService {
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ContradictionException e) {
-            throw  new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
     public List<RequestCategoryDtoOut> getRequestCategories(CategoryParams categoryParams) {
         BooleanExpression expression = QRequestCategory.requestCategory.id.gt(0L);
-        if(categoryParams.getStartDate() != null) {
+        if (categoryParams.getStartDate() != null) {
             expression = expression.and(QRequestCategory.requestCategory.createdAt.after(categoryParams.getStartDate()));
         }
-        if(categoryParams.getEndDate() != null) {
+        if (categoryParams.getEndDate() != null) {
             expression = expression.and(QRequestCategory.requestCategory.createdAt.before(categoryParams.getEndDate()));
         }
         return CategoryMapper.toRequestCategoryDtoOut(requestCategoryRepository.findAll(expression,
-                PageRequest.of(categoryParams.getFrom()/categoryParams.getSize(), categoryParams.getSize(),
+                PageRequest.of(categoryParams.getFrom() / categoryParams.getSize(), categoryParams.getSize(),
                         Sort.by(Sort.Direction.DESC, "createdAt"))));
     }
 

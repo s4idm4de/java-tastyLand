@@ -2,6 +2,7 @@ package ru.s4idm4de.recipe.model.mapper;
 
 import ru.s4idm4de.category.model.mapper.CategoryMapper;
 import ru.s4idm4de.recipe.model.Recipe;
+import ru.s4idm4de.recipe.model.RecipeWithLikes;
 import ru.s4idm4de.recipe.model.dto.RecipeDtoIn;
 import ru.s4idm4de.recipe.model.dto.RecipeDtoOut;
 import ru.s4idm4de.user.model.mapper.UserMapper;
@@ -10,9 +11,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class RecipeMapper {
 
@@ -34,14 +33,14 @@ public class RecipeMapper {
                 .video(recipe.getVideo())
                 .likes(recipe.getLikes())
                 .createdAt(recipe.getCreatedAt().format(formatter))
-                .updatedAt(recipe.getUpdatedAt() == null? null : recipe.getUpdatedAt().format(formatter))
+                .updatedAt(recipe.getUpdatedAt() == null ? null : recipe.getUpdatedAt().format(formatter))
                 .author(UserMapper.toUserDtoOut(recipe.getAuthor()))
                 .isPrivate(recipe.getIsPrivate()).build();
         recipe.getCategories().forEach(category ->
-            recipeDtoOut.addCategoryDtoOut(CategoryMapper.toCategoryDtoOut(category))
+                recipeDtoOut.addCategoryDtoOut(CategoryMapper.toCategoryDtoOut(category))
         );
         recipe.getImages().forEach(image ->
-            recipeDtoOut.addImage(image.getLink())
+                recipeDtoOut.addImage(image.getLink())
         );
         return recipeDtoOut;
     }
@@ -56,9 +55,9 @@ public class RecipeMapper {
 
     public static Recipe updateRecipe(Recipe recipe, RecipeDtoIn recipeDtoIn) {
         @Valid Recipe newRecipe = Recipe.builder()
-                .text(recipeDtoIn.getText() == null? recipe.getText() : recipeDtoIn.getText())
-                .title(recipeDtoIn.getTitle() == null? recipe.getTitle() : recipeDtoIn.getTitle())
-                .video(recipeDtoIn.getVideo() == null? recipe.getVideo() : recipeDtoIn.getVideo())
+                .text(recipeDtoIn.getText() == null ? recipe.getText() : recipeDtoIn.getText())
+                .title(recipeDtoIn.getTitle() == null ? recipe.getTitle() : recipeDtoIn.getTitle())
+                .video(recipeDtoIn.getVideo() == null ? recipe.getVideo() : recipeDtoIn.getVideo())
                 .createdAt(recipe.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
                 .isPrivate(recipeDtoIn.getIsPrivate())
@@ -68,5 +67,14 @@ public class RecipeMapper {
                 //.images(recipe.getImages())
                 .build();
         return newRecipe;
+    }
+
+    public static List<Recipe> toRecipe(Iterable<RecipeWithLikes> recipesWithLikes) {
+        List<Recipe> recipes = new ArrayList<>();
+        for (RecipeWithLikes recipeWithLikes : recipesWithLikes) {
+            recipeWithLikes.getRecipe().setLikes(recipeWithLikes.getLikes());
+            recipes.add(recipeWithLikes.getRecipe());
+        }
+        return recipes;
     }
 }
